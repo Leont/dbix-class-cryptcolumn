@@ -58,12 +58,10 @@ sub register_column {
 			});
 		}
 
-		my %new_info = (%{$info}, inflate_passphrase => $crypt_passphrase);
-		$self->next::method($column, \%new_info, @rest);
+		$info->{inflate_passphrase} = $crypt_passphrase;
 	}
-	else {
-		$self->next::method($column, $info, @rest);
-	}
+
+	$self->next::method($column, $info, @rest);
 }
 
 sub set_column {
