@@ -102,13 +102,15 @@ __END__
 
 In application code:
 
- # 'plain' will automatically be hashed using the specified passphrase_class
- # and passphrase_args. The result of the hashing will stored in the
- # specified encoding
+ # 'plain' will automatically be hashed using the specified
+ # inflate_passphrase arguments
  $rs->create({ passphrase => 'plain' });
 
  my $row = $rs->find({ id => $id });
- my $passphrase = $row->passphrase; # Crypt::Passphrase::PassphraseHash object
+
+ # Returns a Crypt::Passphrase::PassphraseHash object, which has
+ # verify_password and needs_rehash as methods
+ my $passphrase = $row->passphrase;
 
  if ($row->verify_passphrase($input)) {
    if ($row->passphrase_needs_rehash) {
@@ -123,11 +125,19 @@ In application code:
 
 This component can be used to automatically hash password columns using any
 scheme supported by L<Crypt::Passphrase> whenever the value of these columns is
-changed.
+changed, as well as conveniently check if any given password matches the hash.
 
-If the C<verify_method> option is set it adds a method with that name to verify
-if a password matches the known hash, and likewise C<rehash_method> will add
-a method for checking if a password needs to be rehashed.
+Its main advantage over other similar DBIx::Class extensions is that it provides
+the cryptographic agility of Crypt::Passphrase; that means that it allows you to
+define a single scheme that will be used for new passwords, but several schemes
+to check passwords against. It will be able to tell you if you should rehash
+your password, not only because the scheme is outdated, but also because the
+desired parameters have changed.
+
+If the C<verify_method> option is set it adds a method with that name to the row
+class to verify if a password matches the known hash, and likewise
+C<rehash_method> will add a method for checking if a password needs to be
+rehashed.
 
 =head1 METHODS
 
