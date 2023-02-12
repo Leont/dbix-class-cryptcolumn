@@ -24,6 +24,7 @@ my $rs = $schema->resultset('Foo');
 
 		ok !$current->verify_passphrase('mookooh'), 'Rejects incorrect passphrase using check method';
 		ok $current->verify_passphrase('moo'), 'Accepts correct passphrase using check method';
+		ok $current->passphrase->verify_password('moo'), 'Accepts correct passphrase using object';
 		ok !$current->passphrase_needs_rehash, 'Password does not need rehash';
 	}
 
@@ -36,8 +37,8 @@ my $rs = $schema->resultset('Foo');
 
 
 	$row->update({ passphrase => 'mookooh' })->discard_changes;
-	ok $row->verify_passphrase('mookooh'), 'Rejects incorrect passphrase using check method';
-	ok !$row->verify_passphrase('moo'), 'Accepts correct passphrase using check method';
+	ok $row->verify_passphrase('mookooh'), 'Accepts new correct passphrase using check method';
+	ok !$row->verify_passphrase('moo'), 'Rejects old passphrase using check method';
 }
 
 done_testing;
