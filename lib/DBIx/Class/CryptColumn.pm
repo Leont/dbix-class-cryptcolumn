@@ -46,8 +46,8 @@ sub register_column {
 
 		if (defined(my $name = $args->{verify_method})) {
 			$self->_export_sub($name, sub {
-				my ($row, $value) = @_;
-				return $crypt_passphrase->verify_password($row->get_column($column), $value);
+				my ($row, $password) = @_;
+				return $crypt_passphrase->verify_password($password, $row->get_column($column));
 			});
 		}
 
