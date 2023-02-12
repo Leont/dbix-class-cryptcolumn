@@ -1,6 +1,8 @@
 Revision history for DBIx-Class-CryptColumn
 
 {{$NEXT}}
+
+0.004     2023-02-12 17:45:53+01:00 Europe/Amsterdam
           - Fix argument order in verify_method implementation
 
 0.003     2023-02-12 17:21:03+01:00 Europe/Amsterdam
