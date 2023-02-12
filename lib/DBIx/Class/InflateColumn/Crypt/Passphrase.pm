@@ -5,8 +5,7 @@ use warnings;
 
 use parent 'DBIx::Class';
 
-use Crypt::Passphrase 0.006;
-use Crypt::Passphrase::PassphraseHash;
+use Crypt::Passphrase 0.007;
 use Scalar::Util 'blessed';
 
 use namespace::clean;
@@ -21,7 +20,7 @@ sub register_column {
 
 	$self->inflate_column(
 		$column => {
-			inflate => sub { Crypt::Passphrase::PassphraseHash->new($crypt_passphrase, shift) },
+			inflate => sub { $crypt_passphrase->curry_with_hash(shift) },
 			deflate => sub { shift->raw_hash },
 		},
 	);
