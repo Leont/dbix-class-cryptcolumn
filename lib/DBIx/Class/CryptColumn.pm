@@ -80,12 +80,12 @@ __END__
          data_type         => 'integer',
          is_auto_increment => 1,
      },
-     passphrase => {
+     password => {
          data_type          => 'text',
          inflate_passphrase => {
              encoder        => 'Argon2',
-             verify_method  => 'verify_passphrase',
-             rehash_method  => 'passphrase_needs_rehash',
+             verify_method  => 'verify_password',
+             rehash_method  => 'password_needs_rehash',
          },
      },
  );
@@ -96,22 +96,22 @@ In application code:
 
  # 'plain' will automatically be hashed using the specified
  # inflate_passphrase arguments
- $rs->create({ passphrase => 'plain' });
+ $rs->create({ password => 'plain' });
 
  my $row = $rs->find({ id => $id });
 
  # Returns a Crypt::Passphrase::PassphraseHash object, which has
  # verify_password and needs_rehash as methods
- my $passphrase = $row->passphrase;
+ my $password = $row->password;
 
- if ($row->verify_passphrase($input)) {
-   if ($row->passphrase_needs_rehash) {
-     $row->update({ passphrase => $input });
+ if ($row->verify_password($input)) {
+   if ($row->password_needs_rehash) {
+     $row->update({ password => $input });
    }
    ...
  }
 
- $row->passphrase('new passphrase');
+ $row->password('new password');
 
 =head1 DESCRIPTION
 

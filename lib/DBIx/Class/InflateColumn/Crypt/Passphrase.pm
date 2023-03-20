@@ -44,7 +44,7 @@ __END__
      passphrase => {
          data_type          => 'text',
          inflate_passphrase => {
-             encoders   => {
+             encoder         => {
                  module      => 'Argon2',
                  memory_cost => '64M',
                  time_cost   => 5,
