@@ -50,6 +50,20 @@ sub register_column {
 			});
 		}
 
+		if (defined(my $name = $args->{verify_and_rehash_method})) {
+			$self->_export_sub($name, sub {
+				my ($row, $password) = @_;
+
+				my $hash = $row->get_column($column);
+				my $result = $crypt_passphrase->verify_password($password, $hash);
+				if ($result && $crypt_passphrase->needs_rehash($hash)) {
+					$row->update($column => $password);
+				}
+
+				return $result;
+			});
+		}
+
 		$info->{inflate_passphrase} = $crypt_passphrase;
 	}
 
@@ -84,8 +98,7 @@ __END__
          data_type          => 'text',
          inflate_passphrase => {
              encoder        => 'Argon2',
-             verify_method  => 'verify_password',
-             rehash_method  => 'password_needs_rehash',
+             verify_and_rehash_method  => 'verify_and_rehash_password',
          },
      },
  );
@@ -100,12 +113,14 @@ In application code:
 
  my $row = $rs->find({ id => $id });
 
- # Returns a Crypt::Passphrase::PassphraseHash object, which has
- # verify_password and needs_rehash as methods
- my $password = $row->password;
+ if ($row->verify_and_rehash_password($given_password)) {
+   ...
+ }
 
- if ($row->verify_password($input)) {
-   if ($row->password_needs_rehash) {
+ # equivalent to
+
+ if ($row->password->verify_password($given_password)) {
+   if ($row->password->needs_rehash) {
      $row->update({ password => $input });
    }
    ...
@@ -144,6 +159,14 @@ argument.
 
 If this option is set it will add a method with the given name that checks if a
 password needs to be rehashed. It takes no arguments.
+
+=item * verify_and_rehash_method
+
+If this option is set it will add a method with the given name that verifies if
+a password matches the known hash. If it does and the hash needs a rehash it
+will rehash the password and store the result to the database. In either case it
+returns the result of the verification. This method takes a password as its
+only argument.
 
 -back
 
