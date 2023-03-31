@@ -111,6 +111,7 @@ In application code:
    ...
  }
 
+ # Change password
  $row->password('new password');
 
 =head1 DESCRIPTION
@@ -126,10 +127,25 @@ to check passwords against. It will be able to tell you if you should rehash
 your password, not only because the scheme is outdated, but also because the
 desired parameters have changed.
 
-If the C<verify_method> option is set it adds a method with that name to the row
-class to verify if a password matches the known hash, and likewise
-C<rehash_method> will add a method for checking if a password needs to be
-rehashed.
+=head1 ARGUMENTS
+
+In addition to the usual C<Crypt::Passphrase> arguments, this module takes three
+extra arguments that each set a method on the row.
+
+=over 4
+
+=item * verify_method
+
+If this option is set it adds a method with that name to the row class to verify
+if a password matches the known hash. This method takes a password as its single
+argument.
+
+=item * rehash_method
+
+If this option is set it will add a method with the given name that checks if a
+password needs to be rehashed. It takes no arguments.
+
+-back
 
 =head1 METHODS
 
