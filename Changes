@@ -1,6 +1,7 @@
 Revision history for DBIx-Class-CryptColumn
 
 {{$NEXT}}
+          -  Add verify_and_rehash_method argument
 
 0.005     2023-03-20 15:53:48+01:00 Europe/Amsterdam
           - Simplify implementation
