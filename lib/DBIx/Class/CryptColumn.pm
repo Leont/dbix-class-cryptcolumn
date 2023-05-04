@@ -57,7 +57,7 @@ sub register_column {
 				my $hash = $row->get_column($column);
 				my $result = $crypt_passphrase->verify_password($password, $hash);
 				if ($result && $crypt_passphrase->needs_rehash($hash)) {
-					$row->update({ $column => $password });
+					$row->update({ $column => $password })->discard_changes;
 				}
 
 				return $result;
