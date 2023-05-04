@@ -79,6 +79,12 @@ sub set_column {
 	return $self->next::method($col, $val, @rest);
 }
 
+sub set_inflated_column {
+	my ($self, $col, $val, @rest) = @_;
+	local $self->column_info($col)->{inflate_passphrase};
+	$self->next::method($col, $val, @rest);
+}
+
 1;
 
 # ABSTRACT: Automatically hash password/passphrase columns
@@ -181,6 +187,10 @@ normally be directly called by end users.
 =head2 set_column
 
 Hash a passphrase column whenever it is set.
+
+=head2 set_inflated_column
+
+Sets an inflated password column that does not need to be hashed again.
 
 =head2 new
 
