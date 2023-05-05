@@ -1,6 +1,7 @@
 Revision history for DBIx-Class-CryptColumn
 
 {{$NEXT}}
+          - Simplify verify_and_rehash test
 
 0.007     2023-05-05 01:14:38+02:00 Europe/Amsterdam
           - Don't hash inflated password
