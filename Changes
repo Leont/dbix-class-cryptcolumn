@@ -1,6 +1,7 @@
 Revision history for DBIx-Class-CryptColumn
 
 {{$NEXT}}
+          - Add a recode_hash_method option
 
 0.008     2023-07-18 13:37:15+02:00 Europe/Brussels
           - Simplify verify_and_rehash test
